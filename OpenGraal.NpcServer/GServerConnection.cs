@@ -176,11 +176,11 @@ namespace OpenGraal.NpcServer
 						break;
 					}
 
-					//case PacketIn.PLAYERPROPS:
-					//	if (NCPlayer == null)
-					//		NCPlayer = Server.PlayerManager.AddPlayer(0);
-					//	NCPlayer.SetProps(CurPacket);
-					//	break;
+					case PacketIn.PLAYERPROPS:
+						if (NCPlayer == null)
+							NCPlayer = Server.PlayerManager.AddPlayer(0);
+						NCPlayer.SetProps(CurPacket);
+						break;
 
 					// Add weapon to list
 					case PacketIn.NPCWEAPONADD:

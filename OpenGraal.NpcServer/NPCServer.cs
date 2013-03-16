@@ -56,10 +56,10 @@ namespace OpenGraal.NpcServer
 			
 			// Connect to GServer
 			GSConn = new GServerConnection(this);
-			GSConn.Connect("hosting.opengraal.com", 14908);
+			GSConn.Connect("hosting.opengraal.com", 14900);
 			if (GSConn.Connected)
 			{
-                GSConn.SendLogin("(npcserver)", "", "NPC-Server (Server)");
+				GSConn.SendLogin("(npcserver)", "npcserver1", "NPC-Server (Server)");
 				GSConn.ReceiveData();
 			}
 
