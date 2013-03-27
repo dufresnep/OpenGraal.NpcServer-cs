@@ -7,6 +7,8 @@ using System.Text;
 using OpenGraal;
 using OpenGraal.Core;
 using OpenGraal.Common;
+using OpenGraal.Common.Levels;
+using OpenGraal.Common.Players;
 using OpenGraal.Common.Scripting;
 using OpenGraal.NpcServer;
 
@@ -175,7 +177,7 @@ namespace OpenGraal.NpcServer
 						String Name = CurPacket.ReadString().Text;
 						ServerClass Class = Server.FindClass(Name);
 						if (Class != null)
-							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Class.Name.Length + Class.Name + Class.Script);
+							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Class.Name.Length + Class.Name + Class.Script.Replace('\n', '\xa7'));
 						else
 							Server.SendNCChat(Account + " prob: script " + Name + " doesn't exist", null);
 						break;
@@ -216,13 +218,25 @@ namespace OpenGraal.NpcServer
 						break;
 					}
 
+					case PacketIn.NC_LEVELLISTGET:
+					{
+						CString Out = new CString() + (byte)PacketOut.NC_LEVELLIST;
+						foreach (KeyValuePair<string, GraalLevel> level in Server.LevelList)
+						{
+							Out.WriteGByte1((sbyte)level.Key.Length);
+							Out.Write(level.Key);
+						}
+						SendPacket(Out);
+						break;
+					}
+
 					// Retrieve Weapon
 					case PacketIn.NC_WEAPONGET:
 					{
 						String Name = CurPacket.ReadString().Text;
 						ServerWeapon Weapon = Server.FindWeapon(Name);
 						if (Weapon != null)
-							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Weapon.Name.Length + Weapon.Name + (byte)Weapon.Image.Length + Weapon.Image + Weapon.Script);
+							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Weapon.Name.Length + Weapon.Name + (byte)Weapon.Image.Length + Weapon.Image + Weapon.Script.Replace('\n', '\xa7'));
 						else
 							Server.SendNCChat(Account + " prob: weapon " + Name + " doesn't exist", null);
 						break;
@@ -234,7 +248,7 @@ namespace OpenGraal.NpcServer
 						String WeaponName = CurPacket.ReadChars(CurPacket.ReadGUByte1());
 						String WeaponImage = CurPacket.ReadChars(CurPacket.ReadGUByte1());
 						String WeaponScript = CurPacket.ReadString().Text;
-						int res = Server.SetWeapon(WeaponName, WeaponImage, WeaponScript, true);
+						int res = Server.SetWeapon(this.Server.GSConn, WeaponName, WeaponImage, WeaponScript, true);
 						if (res >= 0)
 							Server.SendNCChat("Weapon/GUI-script " + WeaponName + " " + (res == 1 ? "added" : "updated") + " by " + this.Account);
 						break;

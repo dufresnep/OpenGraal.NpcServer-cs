@@ -33,6 +33,7 @@ namespace OpenGraal.NpcServer
 			PRIVATEMESSAGE = 37,
 			NEWWORLDTIME = 42,
 			PLWEAPONSSET = 60,
+			NC_CONTROL = 78,
 		};
 
 		/// <summary>
@@ -40,6 +41,26 @@ namespace OpenGraal.NpcServer
 		/// </summary>
 		public enum PacketOut
 		{
+			NPCLOG = 0,
+			GETWEAPONS = 1,
+			GETLEVELS = 2,
+			SENDPM = 3,
+			SENDTORC = 4,
+			WEAPONADD = 5,
+			WEAPONDEL = 6,
+			PLAYERPROPSSET = 7,
+			PLAYERWEAPONSGET = 8,
+			PLAYERPACKET = 9,
+			PLAYERWEAPONADD = 10,
+			PLAYERWEAPONDEL = 11,
+			LEVELGET = 12,
+			NPCPROPSSET = 13,
+			NPCWARP = 14,
+			SENDRPGMESSAGE = 15,
+			PLAYERFLAGSET = 16,
+			SAY2SIGN = 17,
+			PLAYERSTATUSSET = 18,
+			NPCMOVE = 19,
 			PLAYERPROPS = 2,
 			RCCHAT = 79,
 			NCQUERY = 103,
@@ -71,7 +92,13 @@ namespace OpenGraal.NpcServer
 			PLSETSTATUS = 18,
 			NPCMOVE		= 19,
 		};
-
+		public enum NCI
+		{
+			PLAYERWEAPONS		= 0,
+			PLAYERWEAPONADD		= 1,
+			PLAYERWEAPONDEL		= 2,
+			GMAPLIST			= 3,
+		};
 		/// <summary>
 		/// Member Variables
 		/// </summary>
@@ -121,6 +148,7 @@ namespace OpenGraal.NpcServer
 					// Packet 6 - Set Active Level & Clear
 					case PacketIn.LEVELNAME:
 						ActiveLevel = Server.FindLevel(CurPacket.ReadString().Text);
+						Console.WriteLine(ActiveLevel.Name);
 						//ActiveLevel.Clear();
 						break;
 
@@ -133,7 +161,12 @@ namespace OpenGraal.NpcServer
 					{
 						int npcId = CurPacket.ReadGByte3();
 						if (ActiveLevel != null)
-							ActiveLevel.GetNPC(npcId).SetProps(CurPacket);
+						{
+							GraalLevelNPC test = ActiveLevel.GetNPC(this.Server.GSConn, npcId);
+							test.SetProps(CurPacket);
+							test.Script = "public void onPlayerEnters(GraalPlayer player)\n{\n\tthis.SendToRC(player.Account);\n}\n";
+							this.Server.Compiler.CompileAdd(test);
+						}
 						break;
 					}
 
@@ -160,7 +193,7 @@ namespace OpenGraal.NpcServer
 					// Add Player & Set Props
 					case PacketIn.OTHERPLPROPS:
 					{
-						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2(), this);
 						if (Player != null)
 							Player.SetProps(CurPacket);
 						break;
@@ -172,7 +205,7 @@ namespace OpenGraal.NpcServer
 						String FlagName = CurPacket.ReadString('=').Text;
 						String FlagValue = CurPacket.ReadString().Text;
 						if (Player != null)
-							Player.flags[FlagName] = FlagValue;
+							Player.Flags[FlagName] = FlagValue;
 						break;
 					}
 
@@ -188,7 +221,7 @@ namespace OpenGraal.NpcServer
 						String WeaponName = CurPacket.ReadChars(CurPacket.ReadGUByte1());
 						String WeaponImage = CurPacket.ReadChars(CurPacket.ReadGUByte1());
 						String WeaponScript = CurPacket.ReadString().Text;
-						Server.SetWeapon(WeaponName, WeaponImage, WeaponScript, false);
+						Server.SetWeapon(this, WeaponName, WeaponImage, WeaponScript, false);
 						break;
 					}
 
@@ -231,9 +264,34 @@ namespace OpenGraal.NpcServer
 						CString Message = CurPacket.ReadString();
 						Server.SendPM(PlayerId, Server.NCMsg, true);
 						break;
-
+					case PacketIn.NC_CONTROL:
+						System.Console.Write("GSCONN -> Packet [" + (PacketIn)PacketId + "]: ");
+						Server.SendGSPacket(new CString() + (byte)PacketOut.GETWEAPONS);
+						Server.SendGSPacket(new CString() + (byte)PacketOut.GETLEVELS);
+						int PacketId2 = CurPacket.ReadGUByte1();
+						switch ((NCI)PacketId2)
+						{
+							case NCI.PLAYERWEAPONADD:
+								GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+								if (Player != null)
+								{
+									System.Console.Write("Player: " + Player.Account);
+									//bool addWeapon = (CurPacket.ReadGByte1() > 0);
+									String name = CurPacket.ReadString().Text;
+									System.Console.WriteLine(" Name: " + name);
+									Common.Scripting.ServerWeapon tmpWp = this.Server.FindWeapon(name);
+									//if (addWeapon)
+										Player.AddWeapon(tmpWp);
+									//else
+									//	Player.DeleteWeapon(name, false);
+								}
+								break;
+							default:
+								break;
+						}
+						break;
 					default:
-						System.Console.WriteLine("GSCONN -> Packet [" + PacketId + "]: " + CurPacket.ReadString().Text);
+						System.Console.WriteLine("GSCONN -> Packet [" + (PacketIn)PacketId + "]: " + CurPacket.ReadString().Text);
 						break;
 				}
 			}

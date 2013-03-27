@@ -140,6 +140,8 @@ namespace OpenGraal.NpcServer
 			options.ReferencedAssemblies.Add(Assembly.GetExecutingAssembly().Location);
 			options.ReferencedAssemblies.Add("System.dll");
 			options.ReferencedAssemblies.Add("System.Core.dll");
+			options.ReferencedAssemblies.Add("OpenGraal.Core.dll");
+			options.ReferencedAssemblies.Add("OpenGraal.Common.dll");
 			options.ReferencedAssemblies.Add("Microsoft.CSharp.dll");
 			options.CompilerOptions = "/optimize";
 
@@ -148,7 +150,7 @@ namespace OpenGraal.NpcServer
 			
 			// Compile our code
 			CSharpCodeProvider csProvider = new Microsoft.CSharp.CSharpCodeProvider();
-			Result = csProvider.CompileAssemblyFromSource(options, "using OpenGraal.NpcServer; public class " + PrefixName + NextId[(int)ScriptObject.Type] + " : " + ClassName + " { public " + PrefixName + NextId[(int)ScriptObject.Type] + "(NPCServer Server, IRefObject Ref) : base(Server, Ref) { } " + Script + "\n } ");
+			Result = csProvider.CompileAssemblyFromSource(options, "using System; using OpenGraal; using OpenGraal.NpcServer; using OpenGraal.Core; using OpenGraal.Common.Levels; using OpenGraal.Common.Players; using OpenGraal.Common.Scripting; public class " + PrefixName + NextId[(int)ScriptObject.Type] + " : " + ClassName + " { public " + PrefixName + NextId[(int)ScriptObject.Type] + "(CSocket Server, IRefObject Ref) : base(Server, Ref) { } " + Script + "\n } ");
 			NextId[(int)ScriptObject.Type]++;
 			return (Result.Errors.HasErrors ? null : Result.CompiledAssembly);
 		}
@@ -199,10 +201,11 @@ namespace OpenGraal.NpcServer
 				if (!type.IsSubclassOf(typeof(ScriptObj)))
 					continue;
 
-				ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(Framework), typeof(IRefObject) });
+				ConstructorInfo constructor = type.GetConstructor(new Type[] { typeof(CSocket), typeof(IRefObject) });
 				if (constructor != null && constructor.IsPublic)
 				{
-					ScriptObj obj = (ScriptObj)constructor.Invoke(new object[] { Server, Reference });
+
+					ScriptObj obj = (ScriptObj)constructor.Invoke(new object[] { Server.GSConn, Reference });
 					return obj;
 				}
 			}

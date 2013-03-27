@@ -19,7 +19,7 @@ namespace OpenGraal.NpcServer
         static void Main()
         {
 			Framework framework = new Framework("ncoptions.txt");
-			while (framework.running)
+			while (framework.RunServer())
 				System.Threading.Thread.Sleep(50);
         }
     }

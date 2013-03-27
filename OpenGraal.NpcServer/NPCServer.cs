@@ -20,11 +20,11 @@ namespace OpenGraal.NpcServer
 		/// </summary>
 		protected AsyncCallback cNCAccept;
 		internal GameCompiler Compiler;
-		protected GServerConnection GSConn;
+		public GServerConnection GSConn;
 		protected TcpListener NCListen;
 		
 		protected int TimerId;
-		protected TimerEventHandler TimerHandle;
+		//protected TimerEventHandler TimerHandle;
 		internal object TimerLock = new object();
  
 		// NC Variables
@@ -56,10 +56,10 @@ namespace OpenGraal.NpcServer
 			
 			// Connect to GServer
 			GSConn = new GServerConnection(this);
-			GSConn.Connect("hosting.opengraal.com", 14900);
+			GSConn.Connect("192.168.1.5", 14902);
 			if (GSConn.Connected)
 			{
-				GSConn.SendLogin("(npcserver)", "npcserver1", "NPC-Server (Server)");
+				GSConn.SendLogin("(npcserver)", "3a924c55b92a0e3dfa7b00f76e7dbf36", "NPC-Server (Server)");
 				GSConn.ReceiveData();
 			}
 
@@ -70,9 +70,9 @@ namespace OpenGraal.NpcServer
 			NCListen.BeginAcceptSocket(cNCAccept, NCListen);
 
 			// Setup Timer
-			timeBeginPeriod(50);
-			TimerHandle = new TimerEventHandler(RunServer);
-			TimerId = timeSetEvent(50, 0, TimerHandle, IntPtr.Zero, EVENT_TYPE);
+			//timeBeginPeriod(50);
+			//TimerHandle = new TimerEventHandler(RunServer);
+			//TimerId = timeSetEvent(50, 0, TimerHandle, IntPtr.Zero, EVENT_TYPE);
 		}
 
 		/// <summary>
@@ -81,8 +81,8 @@ namespace OpenGraal.NpcServer
 		~Framework()
 		{
 			this.running = false;
-			timeKillEvent(this.TimerId);
-			timeEndPeriod(50);
+			//timeKillEvent(this.TimerId);
+			//timeEndPeriod(50);
 			
 		}
 
@@ -104,14 +104,18 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Run NPC Server
 		/// </summary>
-		public void RunServer(int id, int msg, IntPtr user, int dw1, int dw2)
+		public bool RunServer()
 		{
 			// Run Timeouts
 			foreach (KeyValuePair<String, ServerWeapon> wep in WeaponList)
 			{
+				//
 				ScriptObj obj = (ScriptObj)wep.Value.ScriptObject;
 				if (obj != null)
+				{
+					//Console.WriteLine("Running events for script: " + wep.Value.Name);
 					obj.RunEvents();
+				}
 			}
 
 			// Level-Npcs
@@ -119,22 +123,27 @@ namespace OpenGraal.NpcServer
 			{
 				foreach (KeyValuePair<String, GraalLevel> lvl in LevelList)
 				{
+					//Console.WriteLine("Level: " + lvl.Value.Name);
 					foreach (KeyValuePair<int, GraalLevelNPC> npc in lvl.Value.NpcList)
 					{
+						//Console.WriteLine("LevelScript: " + npc.Value.Script);
 						ScriptObj obj = (ScriptObj)npc.Value.ScriptObject;
 						if (obj != null)
 							obj.RunEvents();
 					}
 				}
 			}
-
+			Compiler.ManageCompilers();
 			while (Compiler.RunList.Count > 0)
 			{
 				IRefObject obj;
 				lock (Compiler.RunList)
 					obj = Compiler.RunList.Dequeue();
 				obj.Call("onCreated", null);
+				
 			}
+
+			return true;
 		}
 
 		/// <summary>
@@ -241,7 +250,7 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Set Weapon Data (and compile+exec)
 		/// </summary>
-		public int SetWeapon(String WeaponName, String WeaponImage, String WeaponCode, bool SendToGS)
+		public int SetWeapon(CSocket Server, String WeaponName, String WeaponImage, String WeaponCode, bool SendToGS)
 		{
 			// Set Weapon Data
 			int Status = 0;
@@ -253,7 +262,7 @@ namespace OpenGraal.NpcServer
 			}
 				else
 			{
-				Weapon = new ServerWeapon(WeaponName, WeaponImage, WeaponCode);
+				Weapon = new ServerWeapon(Server, WeaponName, WeaponImage, WeaponCode);
 				WeaponList[WeaponName] = Weapon;
 			}
 
@@ -316,18 +325,5 @@ namespace OpenGraal.NpcServer
 					nc.SendPacket(Packet, true);
 			}
 		}
-
-		// P/Invoke declarations
-		protected delegate void TimerEventHandler(int id, int msg, IntPtr user, int dw1, int dw2);
-		protected const int TIME_PERIODIC = 1;
-		protected const int EVENT_TYPE = TIME_PERIODIC;// + 0x100;  // TIME_KILL_SYNCHRONOUS causes a hang ?!
-		[DllImport("winmm.dll")]
-		protected static extern int timeSetEvent(int delay, int resolution, TimerEventHandler handler, IntPtr user, int eventType);
-		[DllImport("winmm.dll")]
-		protected static extern int timeKillEvent(int id);
-		[DllImport("winmm.dll")]
-		protected static extern int timeBeginPeriod(int msec);
-		[DllImport("winmm.dll")]
-		protected static extern int timeEndPeriod(int msec);
 	}
 }
