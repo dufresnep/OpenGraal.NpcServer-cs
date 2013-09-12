@@ -10,8 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGraal.NpcServer</RootNamespace>
     <AssemblyName>OpenGraal.NpcServer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -57,14 +55,7 @@
   <PropertyGroup>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -75,64 +66,57 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NCConnection.cs" />
-    <Compile Include="GServerConnection.cs" />
-    <Compile Include="NPCServer.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptSystem\GameCompiler.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\NCConnection.cs" />
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\GServerConnection.cs" />
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\NPCServer.cs" />
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Program.cs" />
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\AssemblyInfo.cs" />
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\ScriptSystem\GameCompiler.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Resources.resx">
+      <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Resources.Designer.cs">
+      <DependentUpon>..\..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Resources.resx</DependentUpon>
     </Compile>
-    <None Include="packages.config" />
-    <None Include="Properties\app.manifest" />
-    <None Include="Properties\Settings.settings">
+    <None Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\packages.config" />
+    <None Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\app.manifest" />
+    <None Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    <Compile Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Settings.Designer.cs">
+      <DependentUpon>..\..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Properties\Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+    <BootstrapperPackage Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\.NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
-      <Install>true</Install>
     </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+    <BootstrapperPackage Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
     </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+    <BootstrapperPackage Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Microsoft.Net.Framework.3.5.SP1">
       <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
     </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+    <BootstrapperPackage Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.npcserver-cs\trunk\OpenGraal.NpcServer\Microsoft.Windows.Installer.3.1">
       <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\opengraal.common-cs\trunk\OpenGraal.Common\OpenGraal.Common.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.common-cs\trunk\OpenGraal.Common\OpenGraal.Common.csproj">
       <Project>{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}</Project>
       <Name>OpenGraal.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\opengraal.core-cs\trunk\OpenGraal.Core\OpenGraal.Core.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\marlon%40eevul.org\graal\googlecodegserver\opengraal.core-cs\trunk\OpenGraal.Core\OpenGraal.Core.csproj">
       <Project>{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}</Project>
       <Name>OpenGraal.Core</Name>
     </ProjectReference>

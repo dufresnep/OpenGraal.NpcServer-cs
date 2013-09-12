@@ -15,6 +15,7 @@ namespace OpenGraal.NpcServer
 {
 	public class Framework
 	{
+		#region Member variables
 		/// <summary>
 		/// Member Variables
 		/// </summary>
@@ -39,7 +40,9 @@ namespace OpenGraal.NpcServer
 		public Dictionary<String, ServerWeapon> WeaponList = new Dictionary<String, ServerWeapon>();
 		public GraalPlayerList PlayerManager = null;
 		public bool running = true;
+		#endregion
 
+		#region Constructor / Destructor
 		/// <summary>
 		/// Creates a new NPCServer
 		/// </summary>
@@ -56,10 +59,10 @@ namespace OpenGraal.NpcServer
 			
 			// Connect to GServer
 			GSConn = new GServerConnection(this);
-			GSConn.Connect("192.168.1.5", 14902);
+			GSConn.Connect("hosting.opengraal.com", 14900);
 			if (GSConn.Connected)
 			{
-				GSConn.SendLogin("(npcserver)", "3a924c55b92a0e3dfa7b00f76e7dbf36", "NPC-Server (Server)");
+				GSConn.SendLogin("(npcserver)", "npcserver1", "NPC-Server (Server)");
 				GSConn.ReceiveData();
 			}
 
@@ -85,6 +88,7 @@ namespace OpenGraal.NpcServer
 			//timeEndPeriod(50);
 			
 		}
+		#endregion
 
 		/// <summary>
 		/// Accept incoming connection for NPC-Control
@@ -101,6 +105,7 @@ namespace OpenGraal.NpcServer
 			NCListen.BeginAcceptSocket(cNCAccept, NCListen);
 		}
 
+		#region Public functions
 		/// <summary>
 		/// Run NPC Server
 		/// </summary>
@@ -325,5 +330,6 @@ namespace OpenGraal.NpcServer
 					nc.SendPacket(Packet, true);
 			}
 		}
+		#endregion
 	}
 }
