@@ -46,7 +46,7 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Creates a new NPCServer
 		/// </summary>
-		internal Framework(string OptionsFile = "")
+		internal Framework(string OptionsFile = "settings.ini")
 		{
 			// Default PM
 			this.NCMsg = CString.tokenize("I am the npcserver for\nthis game server. Almost\nall npc actions are controled\nby me.");
@@ -56,22 +56,26 @@ namespace OpenGraal.NpcServer
 
 			// Create Player Manager
 			PlayerManager = new Players.PlayerList(this,GSConn);
-			
+			AppSettings settings = AppSettings.GetInstance();
+			settings.Load(OptionsFile);
+
 			// Connect to GServer
 			GSConn = new GServerConnection(this);
-			GSConn.Connect("loginserver.graal.in", 14900);
+			GSConn.Connect(settings.Address, settings.Port);
 			if (GSConn.Connected)
 			{
-				GSConn.SendLogin("(npcserver)", "", "Master (Global)");
+				GSConn.SendLogin(settings.Account, settings.Password, settings.Nickname);
 				GSConn.ReceiveData();
 			}
 
 			// Setup NPC-Control Listener
 			cNCAccept = new AsyncCallback(NCControl_Accept);
-			NCListen = new TcpListener(IPAddress.Parse("0.0.0.0"), 14852);
+			NCListen = new TcpListener(IPAddress.Parse("0.0.0.0"), settings.NCPort);
 			NCListen.Start();
 			NCListen.BeginAcceptSocket(cNCAccept, NCListen);
 
+			settings.Save();
+			
 			// Setup Timer
 			//timeBeginPeriod(50);
 			//TimerHandle = new TimerEventHandler(RunServer);
