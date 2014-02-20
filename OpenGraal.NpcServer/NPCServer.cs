@@ -38,7 +38,7 @@ namespace OpenGraal.NpcServer
 		public Dictionary<String, GraalLevel> LevelList = new Dictionary<String, GraalLevel>();
 		public Dictionary<String, ServerClass> ClassList = new Dictionary<String, ServerClass>();
 		public Dictionary<String, ServerWeapon> WeaponList = new Dictionary<String, ServerWeapon>();
-		public GraalPlayerList PlayerManager = null;
+		public Players.PlayerList PlayerManager = null;
 		public bool running = true;
 		#endregion
 
@@ -55,14 +55,14 @@ namespace OpenGraal.NpcServer
 			Compiler = new GameCompiler(this);
 
 			// Create Player Manager
-			PlayerManager = new GraalPlayerList();
+			PlayerManager = new Players.PlayerList(this,GSConn);
 			
 			// Connect to GServer
 			GSConn = new GServerConnection(this);
-			GSConn.Connect("hosting.opengraal.com", 14900);
+			GSConn.Connect("loginserver.graal.in", 14900);
 			if (GSConn.Connected)
 			{
-				GSConn.SendLogin("(npcserver)", "npcserver1", "NPC-Server (Server)");
+				GSConn.SendLogin("(npcserver)", "", "Master (Global)");
 				GSConn.ReceiveData();
 			}
 
@@ -104,6 +104,8 @@ namespace OpenGraal.NpcServer
 			// Listen for incoming connections
 			NCListen.BeginAcceptSocket(cNCAccept, NCListen);
 		}
+
+		
 
 		#region Public functions
 		/// <summary>
@@ -170,7 +172,25 @@ namespace OpenGraal.NpcServer
 
 			return Level;
 		}
-		
+
+		/// <summary>
+		/// FindLevel
+		/// </summary>
+		/// <param name="Name"></param>
+		/// <returns></returns>
+		public GraalLevelNPC FindNPC(int id)
+		{
+			GraalLevelNPC NPC = null;
+			foreach (KeyValuePair<string, GraalLevel> l in LevelList)
+			{
+				if (l.Value.NpcList.TryGetValue((int)id, out NPC))
+					continue;
+			}
+
+
+			return NPC;
+		}	
+	
 		/// <summary>
 		/// FindClass
 		/// </summary>
@@ -279,6 +299,37 @@ namespace OpenGraal.NpcServer
 				{
 					this.SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.WEAPONADD + (byte)WeaponName.Length + WeaponName + (byte)WeaponImage.Length + WeaponImage + WeaponCode);
 					Compiler.CompileAdd(Weapon);
+					/*
+					CString output = new CString();
+					output += new CString() + (byte)33 + (byte)WeaponName.Length + WeaponName
+						+ (byte)0 + (byte)WeaponImage.Length + WeaponImage
+						+ (byte)74 + (short)0 + "\n";
+
+					CString header = new CString()+"weapon";
+
+					// Get the mod time and send packet 197.
+					CString smod = new CString() + (long)123123;
+					smod.Tokenize();
+					output += new CString() + (byte)197 + header + "," + smod + "\n";
+
+					//System.IO.StreamReader sr = new System.IO.StreamReader(WeaponName.Replace("-","weapon").Replace("*","weapon")+"_ClientSide.dll");
+					CString b = new CString() + "lol";
+					//sr.Close();
+					//sr.Dispose();
+					
+					// Add to the output stream.
+					output += new CString() + (byte)100 + (int)b.Length + "\n";
+					output += new CString() + b;
+
+					foreach (GraalPlayer pl in this.PlayerManager)
+					{
+						if (pl.FindWeapon(WeaponName) != null)
+						{
+							this.SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.FORWARDTOPLAYER + (short)pl.Id + output);
+							Console.WriteLine(output);
+						}
+					}
+					*/
 				}
 			}
 
@@ -300,7 +351,7 @@ namespace OpenGraal.NpcServer
 		/// </summary>
 		public void SendPM(short PlayerId, String Message, bool IsTokenized)
 		{
-			GSConn.SendPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.SENDPM + (short)PlayerId + "\"\"," + (IsTokenized ? Message : CString.tokenize(Message)));
+			SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.SENDPM + (short)PlayerId + "\"\"," + (IsTokenized ? Message : CString.tokenize(Message)));
 		}
 
 		/// <summary>
@@ -308,7 +359,7 @@ namespace OpenGraal.NpcServer
 		/// </summary>
 		public void SendRCChat(String Message)
 		{
-			GSConn.SendPacket(new CString() + (byte)GServerConnection.PacketOut.RCCHAT + Message);
+			SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.RCCHAT + Message);
 		}
 
 		/// <summary>

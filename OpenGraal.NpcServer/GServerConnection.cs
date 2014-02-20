@@ -32,6 +32,7 @@ namespace OpenGraal.NpcServer
 			PLWEAPONMNG = 34,
 			PRIVATEMESSAGE = 37,
 			NEWWORLDTIME = 42,
+			TRIGGERACTION = 48,
 			PLWEAPONSSET = 60,
 			NC_CONTROL = 78,
 		};
@@ -71,26 +72,27 @@ namespace OpenGraal.NpcServer
 		/// </summary>
 		public enum NCREQ
 		{
-			NPCLOG		= 0,
-			GETWEAPONS	= 1,
-			GETLEVELS	= 2,
-			SENDPM		= 3,
-			SENDTORC	= 4,
-			WEAPONADD   = 5,
-			WEAPONDEL	= 6,
-			PLSETPROPS	= 7,
-			PLGETWEPS	= 8,
-			PLSNDPACKET	= 9,
-			PLADDWEP	= 10,
-			PLDELWEP	= 11,
-			LEVELGET	= 12,
-			NPCPROPSET	= 13,
-			NPCWARP		= 14,
-			PLRPGMSG	= 15,
-			PLSETFLAG	= 16,
-			PLMSGSIGN	= 17,
-			PLSETSTATUS = 18,
-			NPCMOVE		= 19,
+			NPCLOG			= 0,
+			GETWEAPONS		= 1,
+			GETLEVELS		= 2,
+			SENDPM			= 3,
+			SENDTORC		= 4,
+			WEAPONADD		= 5,
+			WEAPONDEL		= 6,
+			PLSETPROPS		= 7,
+			PLGETWEPS		= 8,
+			PLSNDPACKET		= 9,
+			PLADDWEP		= 10,
+			PLDELWEP		= 11,
+			LEVELGET		= 12,
+			NPCPROPSET		= 13,
+			NPCWARP			= 14,
+			PLRPGMSG		= 15,
+			PLSETFLAG		= 16,
+			PLMSGSIGN		= 17,
+			PLSETSTATUS		= 18,
+			NPCMOVE			= 19,
+			FORWARDTOPLAYER = 20,
 		};
 		public enum NCI
 		{
@@ -103,7 +105,7 @@ namespace OpenGraal.NpcServer
 		/// Member Variables
 		/// </summary>
 		protected Framework Server;
-		protected GraalPlayer NCPlayer;
+		protected Players.Player NCPlayer;
 		protected GraalLevel ActiveLevel = null;
 
 		/// <summary>
@@ -160,11 +162,19 @@ namespace OpenGraal.NpcServer
 					case PacketIn.LEVELNPCPROPS:
 					{
 						int npcId = CurPacket.ReadGByte3();
+						//Console.WriteLine("npc-id("+npcId.ToString()+")");
 						if (ActiveLevel != null)
 						{
+							
 							GraalLevelNPC test = ActiveLevel.GetNPC(this.Server.GSConn, npcId);
+							test.npcserver = true;
 							test.SetProps(CurPacket);
-							test.Script = "public void onPlayerEnters(GraalPlayer player)\n{\n\tthis.SendToRC(player.Account);\n}\n";
+							/*
+							foreach (NCConnection nc in Server.NCList)
+							{
+								nc.SendPacket(new CString() + (byte)NCConnection.PacketOut.NC_NPCADD + (int)test.Id + (byte)50 + (byte)test.Nickname.Length + test.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)test.Level.Name.Length + test.Level.Name);
+							}
+							*/
 							this.Server.Compiler.CompileAdd(test);
 						}
 						break;
@@ -193,15 +203,18 @@ namespace OpenGraal.NpcServer
 					// Add Player & Set Props
 					case PacketIn.OTHERPLPROPS:
 					{
-						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2(), this);
+						Players.Player Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2(), this);
 						if (Player != null)
+						{
 							Player.SetProps(CurPacket);
+							
+						}
 						break;
 					}
 
 					case PacketIn.PLFLAGSET:
 					{
-						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+						Players.Player Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
 						String FlagName = CurPacket.ReadString('=').Text;
 						String FlagValue = CurPacket.ReadString().Text;
 						if (Player != null)
@@ -211,7 +224,7 @@ namespace OpenGraal.NpcServer
 
 					case PacketIn.PLAYERPROPS:
 						if (NCPlayer == null)
-							NCPlayer = Server.PlayerManager.AddPlayer(0);
+							NCPlayer = (Players.Player)Server.PlayerManager.AddPlayer(0);
 						NCPlayer.SetProps(CurPacket);
 						break;
 
@@ -222,13 +235,17 @@ namespace OpenGraal.NpcServer
 						String WeaponImage = CurPacket.ReadChars(CurPacket.ReadGUByte1());
 						String WeaponScript = CurPacket.ReadString().Text;
 						Server.SetWeapon(this, WeaponName, WeaponImage, WeaponScript, false);
+						foreach (Players.Player p in this.Server.PlayerManager)
+						{
+							this.Server.SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.PLGETWEPS + (short)p.Id);
+						}
 						break;
 					}
 
 					// Add/Remove weapon from Player
 					case PacketIn.PLWEAPONMNG:
 					{
-						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+						Players.Player Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
 						if (Player != null)
 						{
 							bool addWeapon = (CurPacket.ReadGByte1() > 0);
@@ -244,7 +261,7 @@ namespace OpenGraal.NpcServer
 
 					case PacketIn.PLWEAPONSSET:
 					{
-						GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+						Players.Player Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
 						if (Player != null)
 						{
 							while (CurPacket.BytesLeft > 0)
@@ -264,6 +281,33 @@ namespace OpenGraal.NpcServer
 						CString Message = CurPacket.ReadString();
 						Server.SendPM(PlayerId, Server.NCMsg, true);
 						break;
+					case PacketIn.TRIGGERACTION:
+						short _pid = CurPacket.ReadGByte2();
+						int _npcId = (int)CurPacket.readGUInt();
+						float x = (float)CurPacket.readGUChar() / 2.0f;
+						float y = (float)CurPacket.readGUChar() / 2.0f;
+						string action = CurPacket.ReadString(',').ToString().Trim();
+						string[] _params = CurPacket.ReadString().ToString().Split(',');
+						Console.Write("Call npcid("+_npcId.ToString()+") onAction"+action+"(_params); _params: ");
+						foreach (string p in _params)
+							Console.Write(p+", ");
+						Console.WriteLine();
+						if (_npcId != 0)
+						{
+							GraalLevelNPC tmpNpc = this.Server.PlayerManager.FindPlayer(_pid).Level.GetNPC(_npcId);
+
+							if (tmpNpc == null)
+								Console.WriteLine("npc cannot be found! :'(");
+
+							if (tmpNpc != null)
+								tmpNpc.Call("onAction" + action, new object[] { this.Server.PlayerManager.FindPlayer(_pid), _params });
+						}
+						else
+						{
+							this.Server.PlayerManager.FindPlayer(_pid).CallNPCs("onAction" + action, new object[] { this.Server.PlayerManager.FindPlayer(_pid), _params });
+							this.Server.PlayerManager.FindPlayer(_pid).Level.CallNPCs("onAction" + action, new object[] { this.Server.PlayerManager.FindPlayer(_pid), _params });
+						}
+						break;
 					case PacketIn.NC_CONTROL:
 						System.Console.Write("GSCONN -> Packet [" + (PacketIn)PacketId + "]: ");
 						Server.SendGSPacket(new CString() + (byte)PacketOut.GETWEAPONS);
@@ -271,22 +315,53 @@ namespace OpenGraal.NpcServer
 						int PacketId2 = CurPacket.ReadGUByte1();
 						switch ((NCI)PacketId2)
 						{
-							case NCI.PLAYERWEAPONADD:
-								GraalPlayer Player = Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
-								if (Player != null)
+							case NCI.PLAYERWEAPONS: // 0
 								{
-									System.Console.Write("Player: " + Player.Account);
-									//bool addWeapon = (CurPacket.ReadGByte1() > 0);
+									Players.Player Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+									if (Player != null)
+									{
+										Console.WriteLine(Player.Account);
+										CString weapons = CurPacket.Untokenize();
+										string[] weaponsarr = weapons.ToString().Split('\n');
+										foreach (string tmpWeap in weaponsarr)
+										{
+											//string tmpWeap = CurPacket.ReadChars(CurPacket.ReadGUByte1());
+											Console.WriteLine("Weapon: " + tmpWeap);
+											if (Player.FindWeapon(tmpWeap) == null)
+											{
+												Console.WriteLine("Not Found on player");
+												Common.Scripting.ServerWeapon tmpWeap2 = this.Server.FindWeapon(tmpWeap);
+												if (tmpWeap2 != null)
+												{
+													Console.WriteLine("Adding");
+													Player.AddWeapon(tmpWeap2);
+												}
+												else
+													Console.WriteLine("Weapon not found in system. :'(");
+											}
+										}
+									}
+									break;
+								}
+
+							case NCI.PLAYERWEAPONADD:
+								System.Console.WriteLine(" ADDWEAPON");
+								Players.Player _Player = (Players.Player)Server.PlayerManager.AddPlayer(CurPacket.ReadGByte2());
+								if (_Player != null)
+								{
+									System.Console.Write("Player: " + _Player.Account);
+									bool addWeapon = (CurPacket.ReadGByte1() > 0);
 									String name = CurPacket.ReadString().Text;
 									System.Console.WriteLine(" Name: " + name);
 									Common.Scripting.ServerWeapon tmpWp = this.Server.FindWeapon(name);
-									//if (addWeapon)
-										Player.AddWeapon(tmpWp);
-									//else
-									//	Player.DeleteWeapon(name, false);
+									if (addWeapon)
+										_Player.AddWeapon(tmpWp);
+									else
+										_Player.DeleteWeapon(name, false);
 								}
 								break;
 							default:
+								System.Console.WriteLine("[" + PacketId2 + "]: " + CurPacket.ReadString().Text);
 								break;
 						}
 						break;

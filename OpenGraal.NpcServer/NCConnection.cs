@@ -118,19 +118,17 @@ namespace OpenGraal.NpcServer
 				if (nc != this)
 					SendPacket(new CString() + (byte)PacketOut.NC_CHAT + "New NC: " + Account);
 			}
-
 			/*
-			// Send Classes
-			std::map<CString, TScriptClass *> *classList = mServer->getClassList();
-			for (std::map<CString, TScriptClass *>::const_iterator i = classList->begin(); i != classList->end(); ++i)
-				sendPacket(CString() >> (char)PLO_NC_CLASSADD << i->first);
-
-			// Send Npcs
-			std::map<int, TScriptNPC *> *npcList = mServer->getNpcList();
-			for (std::map<int, TScriptNPC *>::const_iterator i = npcList->begin(); i != npcList->end(); ++i)
-				sendPacket(CString() << i->second->GetNpcPacket());
+			foreach (KeyValuePair<string, GraalLevel> lvl in this.Server.LevelList)
+			{
+				// {158}{INT id}{CHAR 50}{CHAR name length}{name}{CHAR 51}{CHAR type length}{type}{CHAR 52}{CHAR level length}{level}
+				foreach (KeyValuePair<int, GraalLevelNPC> npc in lvl.Value.NpcList)
+				{
+					SendPacket(new CString() + (byte)PacketOut.NC_NPCADD + (int)npc.Key + (byte)50 + (byte)npc.Value.Nickname.Length + npc.Value.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)lvl.Value.Name.Length + lvl.Value.Name);
+					//Console.WriteLine((byte)PacketOut.NC_NPCADD + (int)npc.Key + (byte)50 + (byte)npc.Value.Nickname.Length + npc.Value.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)lvl.Value.Name.Length + lvl.Value.Name);
+				}
+			}
 			*/
-
 			// Set Login
 			LoggedIn = true;
 		}
