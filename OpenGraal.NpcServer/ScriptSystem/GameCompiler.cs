@@ -39,6 +39,11 @@ namespace OpenGraal.NpcServer
 			return this.Server.FindClass(Name);
 		}
 
+		public override Dictionary<string,ServerClass> GetClasses()
+		{
+			return this.Server.ClassList;
+		}
+
 		public override ScriptObj InvokeConstruct(IRefObject Reference, ConstructorInfo constructor)
 		{
 			ScriptObj obj = (ScriptObj)constructor.Invoke(new object[] { this.Server.GSConn, Reference });

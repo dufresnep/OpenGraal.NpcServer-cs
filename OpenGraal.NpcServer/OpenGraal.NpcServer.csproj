@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGraal.NpcServer</RootNamespace>
-    <AssemblyName>OpenGraal.NpcServer</AssemblyName>
+    <AssemblyName>OpenGraal.NpcServer2</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -57,7 +57,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -94,7 +93,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>Properties\Resources.resx</DependentUpon>
+      <DependentUpon>..\Properties\Properties\Resources.resx</DependentUpon>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -103,7 +102,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">
-      <DependentUpon>Properties\Settings.settings</DependentUpon>
+      <DependentUpon>..\Properties\Properties\Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +128,9 @@
       <Project>{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}</Project>
       <Name>OpenGraal.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="NATUPNPLib" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

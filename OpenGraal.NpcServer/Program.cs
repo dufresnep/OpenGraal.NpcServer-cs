@@ -18,7 +18,7 @@ namespace OpenGraal.NpcServer
         [STAThread]
         static void Main()
         {
-			Framework framework = new Framework("ncoptions.txt");
+			Framework framework = new Framework("settings.ini");
 			while (framework.RunServer())
 				System.Threading.Thread.Sleep(50);
         }

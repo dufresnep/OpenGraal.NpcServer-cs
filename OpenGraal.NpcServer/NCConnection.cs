@@ -72,15 +72,15 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Base Constructor
 		/// </summary>
-		public NCConnection(Framework Server, Socket Sock)
+		public NCConnection (Framework Server, Socket Sock)
 			: base(Sock)
 		{
 			this.Server = Server;
 		}
 
-		~NCConnection()
+		~NCConnection ()
 		{
-			System.Console.WriteLine("KILLED");
+			System.Console.WriteLine ("KILLED");
 		}
 
 		//public override void Disconnect()
@@ -91,34 +91,34 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Handle Login Packet
 		/// </summary>
-		protected void HandleLogin(CString LoginPacket)
+		protected void HandleLogin (CString LoginPacket)
 		{
 			// Check Type & Version
-			Int32 type = LoginPacket.ReadGUByte1();
-			String version = LoginPacket.ReadChars(8);
-			if (type != 3 || version != "NCL21075")
-			{
-				SendPacket(new CString() + (byte)16 + "Your nc version is not allowed on this server.", true);
-				this.Disconnect();
+			Int32 type = LoginPacket.ReadGUByte1 ();
+			String version = LoginPacket.ReadChars (8);
+			if (type != 3 || version != "NCL21075") {
+				SendPacket (new CString () + (byte)16 + "Your nc version is not allowed on this server.", true);
+				this.Disconnect ();
 				return;
 			}
 
 			// Send Login data for verification
-			Account = LoginPacket.ReadChars(LoginPacket.ReadGUByte1());
-			Password = LoginPacket.ReadChars(LoginPacket.ReadGUByte1());
+			Account = LoginPacket.ReadChars (LoginPacket.ReadGUByte1 ());
+			Password = LoginPacket.ReadChars (LoginPacket.ReadGUByte1 ());
 			//server->sendToGserver(CString() >> (char)GO_REQUEST_RIGHTS << account);
 
 			// Send NC Login
-			SendPacket(new CString() + (byte)PacketOut.NC_CHAT + "Welcome to the NPC-Server for NPC-Server Test");
-			Server.SendNCChat("New NC: " + Account, this);
+			SendPacket (new CString () + (byte)PacketOut.NC_CHAT + "Welcome to the NPC-Server for NPC-Server Test");
+			Server.SendNCChat ("New NC: " + Account, this);
 
 			// Send Current NC's
-			foreach (NCConnection nc in Server.NCList)
-			{
-				if (nc != this)
-					SendPacket(new CString() + (byte)PacketOut.NC_CHAT + "New NC: " + Account);
-			}
 			/*
+			foreach (NCConnection nc in Server.NCList) {
+				if (nc != this)
+					SendPacket (new CString () + (byte)PacketOut.NC_CHAT + "New NC: " + Account);
+				
+			}
+			*/
 			foreach (KeyValuePair<string, GraalLevel> lvl in this.Server.LevelList)
 			{
 				// {158}{INT id}{CHAR 50}{CHAR name length}{name}{CHAR 51}{CHAR type length}{type}{CHAR 52}{CHAR level length}{level}
@@ -128,7 +128,13 @@ namespace OpenGraal.NpcServer
 					//Console.WriteLine((byte)PacketOut.NC_NPCADD + (int)npc.Key + (byte)50 + (byte)npc.Value.Nickname.Length + npc.Value.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)lvl.Value.Name.Length + lvl.Value.Name);
 				}
 			}
-			*/
+
+			// Send list of classes.
+			foreach (KeyValuePair<string, ServerClass> npcClass in this.Server.ClassList)
+			{
+				SendPacket(new CString() + (byte)PacketOut.NC_CLASSADD + npcClass.Value.Name);
+			}		
+
 			// Set Login
 			LoggedIn = true;
 		}
@@ -136,136 +142,136 @@ namespace OpenGraal.NpcServer
 		/// <summary>
 		/// Handle Received Data
 		/// </summary>
-		protected override void HandleData(CString Packet)
+		protected override void HandleData (CString Packet)
 		{
 			// Player not logged in
 			if (!LoggedIn)
-				HandleLogin(Packet.ReadString('\n'));
+				HandleLogin (Packet.ReadString ('\n'));
 
 			// Parse Packets
-			while (Packet.BytesLeft > 0)
-			{
+			while (Packet.BytesLeft > 0) {
 				// Grab Single Packet
-				CString CurPacket = Packet.ReadString('\n');
+				CString CurPacket = Packet.ReadString ('\n');
 
 				// Read Packet Type
-				int PacketId = CurPacket.ReadGUByte1();
+				int PacketId = CurPacket.ReadGUByte1 ();
 
 				// Call Packet Callback
 				//RemoteControl.CallCallBack(PacketId, (CString)CurPacket.DeepClone());
 
 				// Run Internal Packet Function
-				switch ((PacketIn)PacketId)
-				{
-					//case PacketIn.NPCWEAPONADD: // Add Class to List
-					//	{
-							//String className = CurPacket.ReadString().Text;
-							//if (RemoteControl.ClassList.IndexOf(className) == -1)
-							//	RemoteControl.ClassList.Add(className);
-					//		break;
-					//	}
+				switch ((PacketIn)PacketId) {
+				//case PacketIn.NPCWEAPONADD: // Add Class to List
+				//	{
+				//String className = CurPacket.ReadString().Text;
+				//if (RemoteControl.ClassList.IndexOf(className) == -1)
+				//	RemoteControl.ClassList.Add(className);
+				//		break;
+				//	}
 
-					//case PacketIn.NEWWORLDTIME: // Remove Class from List
-						//RemoteControl.ClassList.Remove(CurPacket.ReadString().Text);
-					//	break;
+				//case PacketIn.NEWWORLDTIME: // Remove Class from List
+				//RemoteControl.ClassList.Remove(CurPacket.ReadString().Text);
+				//	break;
 
-					// Retrieve Class
-					case PacketIn.NC_CLASSGET:
+				// Retrieve Class
+				case PacketIn.NC_CLASSGET:
 					{
-						String Name = CurPacket.ReadString().Text;
-						ServerClass Class = Server.FindClass(Name);
+						String Name = CurPacket.ReadString ().Text;
+						ServerClass Class = Server.FindClass (Name);
 						if (Class != null)
-							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Class.Name.Length + Class.Name + Class.Script.Replace('\n', '\xa7'));
+							SendPacket (new CString () + (byte)PacketOut.NC_WEAPONGET + (byte)Class.Name.Length + Class.Name + Class.Script.Replace ('\n', '\xa7'));
 						else
-							Server.SendNCChat(Account + " prob: script " + Name + " doesn't exist", null);
+							Server.SendNCChat (Account + " prob: script " + Name + " doesn't exist", null);
 						break;
 					}
 
-					// Set Class
-					case PacketIn.NC_CLASSADD:
+				// Set Class
+				case PacketIn.NC_CLASSADD:
 					{
-						String ClassName = CurPacket.ReadChars(CurPacket.ReadGUByte1());
-						String ClassScript = CurPacket.ReadString().Text;
-						int res = Server.SetClass(ClassName, ClassScript, true);
+						String ClassName = CurPacket.ReadChars (CurPacket.ReadGUByte1 ());
+						String ClassScript = CurPacket.ReadString ().Untokenize().Text;
+						Console.WriteLine(" prob: Class " + ClassName + " Script: " + ClassScript);
+						int res = Server.SetClass (ClassName, ClassScript, true);
 						if (res >= 0)
-							Server.SendNCChat("Script " + ClassName + " " + (res == 1 ? "added" : "updated") + " by " + this.Account);
+							Server.SendNCChat ("Script " + ClassName + " " + (res == 1 ? "added" : "updated") + " by " + this.Account);
 						break;
 					}
 
-					// Delete Class
-					case PacketIn.NC_CLASSDELETE:
+				// Delete Class
+				case PacketIn.NC_CLASSDELETE:
 					{
-						String ClassName = CurPacket.ReadString().Text;
-						if (Server.DeleteClass(ClassName))
-							Server.SendNCChat("Script " + ClassName + " deleted by " + this.Account);
+						String ClassName = CurPacket.ReadString ().Text;
+						if (Server.DeleteClass (ClassName))
+							Server.SendNCChat ("Script " + ClassName + " deleted by " + this.Account);
 						else
-							Server.SendNCChat(Account + " prob: script " + ClassName + " doesn't exist");
+							Server.SendNCChat (Account + " prob: script " + ClassName + " doesn't exist");
 						break;
 					}
 
-					// Retrieve Weapon List
-					case PacketIn.NC_WEAPONLISTGET:
+				// Retrieve Weapon List
+				case PacketIn.NC_WEAPONLISTGET:
 					{
-						CString Out = new CString() + (byte)PacketOut.NC_WEAPONLISTGET;
-						foreach (KeyValuePair<string, ServerWeapon> weapon in Server.WeaponList)
-						{
-							Out.WriteGByte1((sbyte)weapon.Key.Length);
-							Out.Write(weapon.Key);
+						CString Out = new CString () + (byte)PacketOut.NC_WEAPONLISTGET;
+						foreach (KeyValuePair<string, ServerWeapon> weapon in Server.WeaponList) {
+							Out.WriteGByte1 ((sbyte)weapon.Key.Length);
+							Out.Write (weapon.Key);
 						}
-						SendPacket(Out);
+						SendPacket (Out);
 						break;
 					}
 
-					case PacketIn.NC_LEVELLISTGET:
+				case PacketIn.NC_LEVELLISTGET:
 					{
-						CString Out = new CString() + (byte)PacketOut.NC_LEVELLIST;
-						foreach (KeyValuePair<string, GraalLevel> level in Server.LevelList)
-						{
-							Out.WriteGByte1((sbyte)level.Key.Length);
-							Out.Write(level.Key);
+						CString Out = new CString () + (byte)PacketOut.NC_LEVELLIST;
+						foreach (KeyValuePair<string, GraalLevel> level in Server.LevelList) {
+							Out.WriteGByte1 ((sbyte)level.Key.Length);
+							Out.Write (level.Key);
 						}
-						SendPacket(Out);
+						SendPacket (Out);
 						break;
 					}
 
-					// Retrieve Weapon
-					case PacketIn.NC_WEAPONGET:
+				// Retrieve Weapon
+				case PacketIn.NC_WEAPONGET:
 					{
-						String Name = CurPacket.ReadString().Text;
-						ServerWeapon Weapon = Server.FindWeapon(Name);
+						String Name = CurPacket.ReadString ().Text;
+						ServerWeapon Weapon = Server.FindWeapon (Name);
 						if (Weapon != null)
-							SendPacket(new CString() + (byte)PacketOut.NC_WEAPONGET + (byte)Weapon.Name.Length + Weapon.Name + (byte)Weapon.Image.Length + Weapon.Image + Weapon.Script.Replace('\n', '\xa7'));
+							SendPacket (new CString () + (byte)PacketOut.NC_WEAPONGET + (byte)Weapon.Name.Length + Weapon.Name + (byte)Weapon.Image.Length + Weapon.Image + Weapon.Script.Replace ('\n', '\xa7'));
 						else
-							Server.SendNCChat(Account + " prob: weapon " + Name + " doesn't exist", null);
+							Server.SendNCChat (Account + " prob: weapon " + Name + " doesn't exist", null);
 						break;
 					}
 
-					// Set Weapon
-					case PacketIn.NC_WEAPONADD:
+				// Set Weapon
+				case PacketIn.NC_WEAPONADD:
 					{
-						String WeaponName = CurPacket.ReadChars(CurPacket.ReadGUByte1());
-						String WeaponImage = CurPacket.ReadChars(CurPacket.ReadGUByte1());
-						String WeaponScript = CurPacket.ReadString().Text;
-						int res = Server.SetWeapon(this.Server.GSConn, WeaponName, WeaponImage, WeaponScript, true);
+						String WeaponName = CurPacket.ReadChars (CurPacket.ReadGUByte1 ());
+						String WeaponImage = CurPacket.ReadChars (CurPacket.ReadGUByte1 ());
+						String WeaponScript = CurPacket.ReadString ().Text;
+						int res = Server.SetWeapon (this.Server.GSConn, WeaponName, WeaponImage, WeaponScript, true);
 						if (res >= 0)
-							Server.SendNCChat("Weapon/GUI-script " + WeaponName + " " + (res == 1 ? "added" : "updated") + " by " + this.Account);
+							Server.SendNCChat ("Weapon/GUI-script " + WeaponName + " " + (res == 1 ? "added" : "updated") + " by " + this.Account);
 						break;
 					}
 
-					// Delete Weapon
-					case PacketIn.NC_WEAPONDELETE:
+				// Delete Weapon
+				case PacketIn.NC_WEAPONDELETE:
 					{
-						String WeaponName = CurPacket.ReadString().Text;
-						if (Server.DeleteWeapon(WeaponName))
-							Server.SendNCChat("Weapon " + WeaponName + " deleted by " + this.Account);
+						String WeaponName = CurPacket.ReadString ().Text;
+						if (Server.DeleteWeapon (WeaponName))
+							Server.SendNCChat ("Weapon " + WeaponName + " deleted by " + this.Account);
 						else
-							Server.SendNCChat(Account + " prob: weapon " + WeaponName + " doesn't exist");
+							Server.SendNCChat (Account + " prob: weapon " + WeaponName + " doesn't exist");
 						break;
 					}
-
-					default:
-						System.Console.WriteLine("CLIENTNC -> Packet [" + PacketId + "]: " + CurPacket.Text);
-						break;
+				/*
+				case PacketIn.NC_CHAT:
+					break;
+				*/
+				default:
+					System.Console.WriteLine ("CLIENTNC -> Packet [" + PacketId + "]: " + CurPacket.Text);
+					break;
 				}
 			}
 		}
