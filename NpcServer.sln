@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.NpcServer", "OpenGraal.NpcServer\OpenGraal.NpcServer.csproj", "{57D25FD1-EA2E-46AA-8B48-57931A3E9436}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F} = {CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}
@@ -9,6 +9,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Core", "..\..\opengraal.core-cs\trunk\OpenGraal.Core\OpenGraal.Core.csproj", "{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common", "..\..\opengraal.common-cs\trunk\OpenGraal.Common\OpenGraal.Common.csproj", "{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Scripting", "..\..\opengraal.common.scripting-cs\trunk\OpenGraal.Common.Scripting\OpenGraal.Common.Scripting.csproj", "{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Interfaces", "..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj", "{F35CB43B-DCA8-4283-900A-2923C7C67483}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,16 +35,6 @@ Global
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|Mixed Platforms.Build.0 = Release|x86
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|x86.ActiveCfg = Release|x86
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|x86.Build.0 = Release|x86
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|x86.ActiveCfg = Release|Any CPU
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -51,11 +45,41 @@ Global
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|x86.ActiveCfg = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = OpenGraal.NpcServer\OpenGraal.NpcServer.csproj
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|x86.ActiveCfg = Release|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{65B06A98-1CDD-4133-AC5D-55FE3424C0C6}.Release|x86.ActiveCfg = Release|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = OpenGraal.NpcServer\OpenGraal.NpcServer.csproj
 	EndGlobalSection
 EndGlobal

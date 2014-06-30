@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenGraal.NpcServer</RootNamespace>
-    <AssemblyName>OpenGraal.NpcServer2</AssemblyName>
+    <AssemblyName>OpenGraal.NpcServer</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
@@ -57,6 +57,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -93,7 +94,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
-      <DependentUpon>..\Properties\Properties\Resources.resx</DependentUpon>
+      <DependentUpon>Properties\Resources.resx</DependentUpon>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -102,7 +103,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <Compile Include="Properties\Settings.Designer.cs">
-      <DependentUpon>..\Properties\Properties\Settings.settings</DependentUpon>
+      <DependentUpon>Properties\Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -124,13 +125,29 @@
       <Project>{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}</Project>
       <Name>OpenGraal.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj">
+      <Project>{f35cb43b-dca8-4283-900a-2923c7c67483}</Project>
+      <Name>OpenGraal.Common.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\opengraal.common.scripting-cs\trunk\OpenGraal.Common.Scripting\OpenGraal.Common.Scripting.csproj">
+      <Project>{65b06a98-1cdd-4133-ac5d-55fe3424c0c6}</Project>
+      <Name>OpenGraal.Common.Scripting</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\opengraal.core-cs\trunk\OpenGraal.Core\OpenGraal.Core.csproj">
       <Project>{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}</Project>
       <Name>OpenGraal.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="NATUPNPLib" />
+    <COMReference Include="NATUPNPLib">
+      <Guid>{1C565858-F302-471E-B409-F180AA4ABEC6}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
