@@ -28,7 +28,7 @@ namespace OpenGraal.NpcServer
 		{
 			this.Server = Server;
 		}
-
+		
 		public override void OutputError(string errorText)
 		{
 			this.Server.SendNCChat(errorText);
@@ -44,10 +44,43 @@ namespace OpenGraal.NpcServer
 			return this.Server.ClassList;
 		}
 
-		public override ScriptObj InvokeConstruct(IRefObject Reference, ConstructorInfo constructor)
+		public override ScriptObj InvokeConstruct(IRefObject Reference)
 		{
-			ScriptObj obj = (ScriptObj)constructor.Invoke(new object[] { this.Server.GSConn, Reference });
+			ScriptObj obj = null;
+
+			if (Reference.Type == IRefObject.ScriptType.WEAPON)
+				obj = (ScriptObj)(new ScriptWeapon(this.Server.GSConn, Reference));// (ScriptObj)Reference;//
+			else if (Reference.Type == IRefObject.ScriptType.LEVELNPC)
+				obj = (ScriptObj)(new ScriptLevelNpc(this.Server.GSConn, Reference));
+			if (Reference.AttachToGlobalScriptInstance != null)
+			{
+				try
+				{
+					V8Instance.GetInstance().Evaluate(Reference.AttachToGlobalScriptInstance);
+					V8Instance.forEachProp(V8Instance.GetInstance().Script, new Action<string>(propName =>
+					{
+						Console.WriteLine(propName);
+					}));
+					
+					//if (V8Instance.hasMethod(V8Instance.GetInstance().Script, Reference.V8ScriptName, 1))
+					{
+						dynamic test = null;
+						if (Reference.Type == IRefObject.ScriptType.WEAPON)
+							test = V8Instance.InvokeFunction(Reference.V8ScriptName, new object[] {  });
+						else if (Reference.Type == IRefObject.ScriptType.LEVELNPC)
+							test = V8Instance.InvokeFunction(Reference.V8ScriptName, new object[] {  });
+						test.onCreated();
+
+					}
+
+				}
+				catch (Microsoft.ClearScript.ScriptEngineException e)
+				{
+					HandleErrors((Reference.Type == IRefObject.ScriptType.WEAPON ? "weapon" : "levelnpc_") + Reference.GetErrorText(), e.ErrorDetails.Replace('\n', ' '));
+				}
+			}
 			return obj;
 		}
+		
 	}
 }

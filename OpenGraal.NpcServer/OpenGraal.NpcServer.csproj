@@ -56,6 +56,11 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClearScript, Version=5.3.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\ClearScript.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -69,12 +74,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
-    <Reference Include="WeaponPrefix5_ClientSide, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\WeaponPrefix5_ClientSide.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IGameServerConnection.cs" />
+    <Compile Include="Interface1.cs" />
     <Compile Include="NCConnection.cs" />
     <Compile Include="GServerConnection.cs" />
     <Compile Include="NPCServer.cs" />
@@ -124,6 +127,10 @@
     <ProjectReference Include="..\..\..\opengraal.common-cs\trunk\OpenGraal.Common\OpenGraal.Common.csproj">
       <Project>{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}</Project>
       <Name>OpenGraal.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\opengraal.common.connections-cs\trunk\OpenGraal.Common.Connections\OpenGraal.Common.Connections.csproj">
+      <Project>{8914345c-bda5-4753-8e52-3a88d4f2e6df}</Project>
+      <Name>OpenGraal.Common.Connections</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj">
       <Project>{f35cb43b-dca8-4283-900a-2923c7c67483}</Project>

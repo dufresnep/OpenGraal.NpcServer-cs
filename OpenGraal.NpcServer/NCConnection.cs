@@ -124,6 +124,8 @@ namespace OpenGraal.NpcServer
 				// {158}{INT id}{CHAR 50}{CHAR name length}{name}{CHAR 51}{CHAR type length}{type}{CHAR 52}{CHAR level length}{level}
 				foreach (KeyValuePair<int, GraalLevelNPC> npc in lvl.Value.NpcList)
 				{
+					//CString test = new CString();
+					//test.ReadGUByte1
 					SendPacket(new CString() + (byte)PacketOut.NC_NPCADD + (int)npc.Key + (byte)50 + (byte)npc.Value.Nickname.Length + npc.Value.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)lvl.Value.Name.Length + lvl.Value.Name);
 					//Console.WriteLine((byte)PacketOut.NC_NPCADD + (int)npc.Key + (byte)50 + (byte)npc.Value.Nickname.Length + npc.Value.Nickname + (byte)51 + (byte)("OBJECT".Length) + "OBJECT" + (byte)52 + (byte)lvl.Value.Name.Length + lvl.Value.Name);
 				}

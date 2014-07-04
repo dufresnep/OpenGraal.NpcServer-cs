@@ -10,7 +10,7 @@ using OpenGraal.Common.Levels;
 
 namespace OpenGraal.NpcServer
 {
-	public class GServerConnection : CSocket
+	public class GServerConnection : CSocket, OpenGraal.NpcServer.IGServerConnection
 	{
 		/// <summary>
 		/// Enumerator -> Packet In
@@ -162,7 +162,7 @@ namespace OpenGraal.NpcServer
 						int npcId = CurPacket.ReadGByte3 ();
 						//Console.WriteLine("npc-id("+npcId.ToString()+")");
 						if (ActiveLevel != null) {
-							
+	
 							GraalLevelNPC test = ActiveLevel.GetNPC (this.Server.GSConn, npcId);
 							test.npcserver = true;
 							test.SetProps (CurPacket);

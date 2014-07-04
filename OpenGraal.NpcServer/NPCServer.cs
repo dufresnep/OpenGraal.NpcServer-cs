@@ -333,7 +333,7 @@ namespace OpenGraal.NpcServer
 				//if (SendToGS)
 				//	this.SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ. + (byte)ClassName.Length + ClassName + ClassScript);
 
-				Compiler.CompileAdd(Class);
+				//Compiler.CompileAdd(Class);
 			}
 
 			// Added or Updated?
@@ -360,6 +360,18 @@ namespace OpenGraal.NpcServer
 			if (Weapon != null) {
 				// Send to GServer
 				if (SendToGS) {
+					// Send to GServer
+					//if (SendToGS)
+					//{
+					//this.SendGSPacket(new CString() + (byte)GServerConnection.PacketOut.NC_NPCGET + (byte)GServerConnection.NCREQ.WEAPONADD + (byte)WeaponName.Length + WeaponName + (byte)WeaponImage.Length + WeaponImage + WeaponCode);
+					
+
+					//} else
+					//{
+					//	Console.WriteLine(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + "\\WeaponPrefix5_ClientSide.dll");
+					//Weapon.ScriptObject = Game1.GetInstance().Compiler.RunScript(Weapon, System.Reflection.Assembly.LoadFile(System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase).Substring(6) + "\\WeaponPrefix5_ClientSide.dll"));
+					//WeaponList[WeaponName] = Weapon;
+					//}
 					this.SendGSPacket (new CString () + (byte)GServerConnection.PacketOut.NCQUERY + (byte)GServerConnection.NCREQ.WEAPONADD + (byte)WeaponName.Length + WeaponName + (byte)WeaponImage.Length + WeaponImage + WeaponCode);
 					Compiler.CompileAdd (Weapon);
 					/*
@@ -367,7 +379,7 @@ namespace OpenGraal.NpcServer
 					output += new CString() + (byte)33 + (byte)WeaponName.Length + WeaponName
 						+ (byte)0 + (byte)WeaponImage.Length + WeaponImage
 						+ (byte)74 + (short)0 + "\n";
-
+					
 					CString header = new CString()+"weapon";
 
 					// Get the mod time and send packet 197.
@@ -383,7 +395,7 @@ namespace OpenGraal.NpcServer
 					// Add to the output stream.
 					output += new CString() + (byte)100 + (int)b.Length + "\n";
 					output += new CString() + b;
-
+					
 					foreach (GraalPlayer pl in this.PlayerManager)
 					{
 						if (pl.FindWeapon(WeaponName) != null)
