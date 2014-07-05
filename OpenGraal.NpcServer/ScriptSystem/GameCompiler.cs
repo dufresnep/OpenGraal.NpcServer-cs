@@ -56,20 +56,14 @@ namespace OpenGraal.NpcServer
 			{
 				try
 				{
-					V8Instance.GetInstance().Evaluate(Reference.AttachToGlobalScriptInstance);
-					V8Instance.forEachProp(V8Instance.GetInstance().Script, new Action<string>(propName =>
-					{
-						Console.WriteLine(propName);
-					}));
+					V8Instance.GetInstance().Execute(Reference.AttachToGlobalScriptInstance);
 					
 					//if (V8Instance.hasMethod(V8Instance.GetInstance().Script, Reference.V8ScriptName, 1))
 					{
-						dynamic test = null;
-						if (Reference.Type == IRefObject.ScriptType.WEAPON)
-							test = V8Instance.InvokeFunction(Reference.V8ScriptName, new object[] {  });
-						else if (Reference.Type == IRefObject.ScriptType.LEVELNPC)
-							test = V8Instance.InvokeFunction(Reference.V8ScriptName, new object[] {  });
-						test.onCreated();
+						//dynamic test = null;
+						obj.scriptobj = Reference.scriptobj(obj);//V8Instance.InvokeFunction(V8Instance.GetInstance(),V8Instance.GetInstance().Script,Reference.V8ScriptName,obj);
+						obj.engine = V8Instance.GetInstance();
+						//obj.scriptobj.onCreated();
 
 					}
 
