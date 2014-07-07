@@ -62,6 +62,7 @@ namespace OpenGraal.NpcServer
 					{
 						//dynamic test = null;
 						obj.scriptobj = Reference.scriptobj(obj);//V8Instance.InvokeFunction(V8Instance.GetInstance(),V8Instance.GetInstance().Script,Reference.V8ScriptName,obj);
+						obj.scriptobj.toDouble = new Func<decimal, double>(value => (double)value);
 						obj.engine = V8Instance.GetInstance();
 						//obj.scriptobj.onCreated();
 

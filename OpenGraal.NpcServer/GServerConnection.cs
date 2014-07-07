@@ -289,7 +289,11 @@ namespace OpenGraal.NpcServer
 					Console.WriteLine ();
 					if (_npcId != 0) {
 						GraalLevelNPC tmpNpc = this.Server.PlayerManager.FindPlayer (_pid).Level.GetNPC (_npcId);
-
+						this.Server.PlayerManager.FindPlayer(_pid).CallNPCs("onAction" + action, new object[] {
+							this.Server.PlayerManager.FindPlayer (_pid),
+							_params
+						}
+);
 						if (tmpNpc == null)
 							Console.WriteLine ("npc cannot be found! :'(");
 
