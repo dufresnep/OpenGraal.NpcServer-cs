@@ -120,10 +120,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj">
-      <Project>{f35cb43b-dca8-4283-900a-2923c7c67483}</Project>
-      <Name>OpenGraal.Common.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\clearscript\ClearScript\ClearScript.csproj">
       <Project>{d2382d2c-6576-4d96-b6cd-057c4f6bed96}</Project>
       <Name>ClearScript</Name>
@@ -135,6 +131,10 @@
     <ProjectReference Include="..\..\OpenGraal.Common.Connections-cs\OpenGraal.Common.Connections\OpenGraal.Common.Connections.csproj">
       <Project>{8914345c-bda5-4753-8e52-3a88d4f2e6df}</Project>
       <Name>OpenGraal.Common.Connections</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenGraal.Common.Interfaces-cs\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj">
+      <Project>{f35cb43b-dca8-4283-900a-2923c7c67483}</Project>
+      <Name>OpenGraal.Common.Interfaces</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
