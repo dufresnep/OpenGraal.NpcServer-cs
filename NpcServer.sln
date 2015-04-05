@@ -4,11 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.NpcServer", "OpenGraal.NpcServer\OpenGraal.NpcServer.csproj", "{57D25FD1-EA2E-46AA-8B48-57931A3E9436}"
-	ProjectSection(ProjectDependencies) = postProject
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F} = {CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Core", "..\..\opengraal.core-cs\trunk\OpenGraal.Core\OpenGraal.Core.csproj", "{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Interfaces", "..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj", "{F35CB43B-DCA8-4283-900A-2923C7C67483}"
 EndProject
@@ -17,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Connections", "..\OpenGraal.Common.Connections-cs\OpenGraal.Common.Connections\OpenGraal.Common.Connections.csproj", "{8914345C-BDA5-4753-8E52-3A88D4F2E6DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common", "..\OpenGraal.Common-cs\OpenGraal.Common\OpenGraal.Common.csproj", "{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreVS2013", "..\OpenGraal.Core-cs\CoreVS2013.csproj", "{265AD0CA-2B19-42AB-9949-B04A135969F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,16 +36,6 @@ Global
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|Mixed Platforms.Build.0 = Release|x86
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|x86.ActiveCfg = Release|x86
 		{57D25FD1-EA2E-46AA-8B48-57931A3E9436}.Release|x86.Build.0 = Release|x86
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F35CB43B-DCA8-4283-900A-2923C7C67483}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -89,6 +76,16 @@ Global
 		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BF323091-36E1-4A64-97A2-A62E5F5ABC1B}.Release|x86.ActiveCfg = Release|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{265AD0CA-2B19-42AB-9949-B04A135969F5}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
