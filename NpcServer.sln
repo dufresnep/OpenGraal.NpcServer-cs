@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.NpcServer", "OpenGraal.NpcServer\OpenGraal.NpcServer.csproj", "{57D25FD1-EA2E-46AA-8B48-57931A3E9436}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F} = {CC4AF8B5-BECF-4562-A0E5-94FBE0FBAB8F}
@@ -13,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Interfaces", "..\..\opengraal.common.interfaces-cs\trunk\OpenGraal.Common.Interfaces\OpenGraal.Common.Interfaces.csproj", "{F35CB43B-DCA8-4283-900A-2923C7C67483}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenGraal.Common.Connections", "..\..\opengraal.common.connections-cs\trunk\OpenGraal.Common.Connections\OpenGraal.Common.Connections.csproj", "{8914345C-BDA5-4753-8E52-3A88D4F2E6DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClearScript", "..\clearscript\ClearScript\ClearScript.csproj", "{D2382D2C-6576-4D96-B6CD-057C4F6BED96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -75,12 +79,19 @@ Global
 		{8914345C-BDA5-4753-8E52-3A88D4F2E6DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8914345C-BDA5-4753-8E52-3A88D4F2E6DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8914345C-BDA5-4753-8E52-3A88D4F2E6DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D2382D2C-6576-4D96-B6CD-057C4F6BED96}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(Performance) = preSolution
-		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = OpenGraal.NpcServer\OpenGraal.NpcServer.csproj
