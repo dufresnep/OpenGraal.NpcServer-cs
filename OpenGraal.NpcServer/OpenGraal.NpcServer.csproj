@@ -66,9 +66,6 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IGameServerConnection.cs" />
@@ -138,6 +135,10 @@
     <ProjectReference Include="..\..\OpenGraal.Core-cs\CoreVS2013.csproj">
       <Project>{265ad0ca-2b19-42ab-9949-b04a135969f5}</Project>
       <Name>CoreVS2013</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharpZipLib\src\ICSharpCode.SharpZLib.csproj">
+      <Project>{0e7413ff-eb9e-4714-acf2-be3a6a7b2ffd}</Project>
+      <Name>ICSharpCode.SharpZLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
